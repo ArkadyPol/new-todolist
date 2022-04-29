@@ -11,7 +11,10 @@ const EditableSpan = memo((props: PropsType) => {
   const [editMode, setEditMode] = useState<boolean>(false)
   const [title, setTitle] = useState<string>(props.value)
 
-  const activateEditMode = () => setEditMode(true)
+  const activateEditMode = () => {
+    setEditMode(true)
+    setTitle(props.value)
+  }
 
   const activateViewMode = () => {
     setEditMode(false)
