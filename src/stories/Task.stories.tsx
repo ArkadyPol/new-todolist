@@ -1,6 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import Task from '../Task'
+import { TaskStatuses } from '../api/todolist-api'
 
 export default {
   title: 'Todolist/Task',
@@ -17,7 +18,7 @@ const Template: ComponentStory<typeof Task> = args => <Task {...args} />
 export const TaskIsDoneExample = Template.bind({})
 TaskIsDoneExample.args = {
   taskId: '1',
-  isDone: true,
+  status: TaskStatuses.Completed,
   title: 'JS',
   todolistId: 'todolistId1',
 }
@@ -25,7 +26,7 @@ TaskIsDoneExample.args = {
 export const TaskIsNotDoneExample = Template.bind({})
 TaskIsNotDoneExample.args = {
   taskId: '1',
-  isDone: false,
+  status: TaskStatuses.New,
   title: 'HTML&CSS',
   todolistId: 'todolistId1',
 }
