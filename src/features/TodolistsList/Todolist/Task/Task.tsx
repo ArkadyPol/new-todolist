@@ -2,8 +2,8 @@ import { ChangeEvent, memo, useCallback } from 'react'
 import Checkbox from '@material-ui/core/Checkbox'
 import IconButton from '@material-ui/core/IconButton'
 import Delete from '@material-ui/icons/Delete'
-import EditableSpan from './EditableSpan'
-import { TaskStatuses } from './api/todolist-api'
+import EditableSpan from '../../../../components/EditableSpan/EditableSpan'
+import { TaskStatuses } from '../../../../api/todolist-api'
 
 type PropsType = {
   status: TaskStatuses

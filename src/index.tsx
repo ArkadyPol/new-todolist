@@ -1,16 +1,15 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
-import AppWithRedux from './AppWithRedux'
+import App from './app/App'
 import './index.css'
 import reportWebVitals from './reportWebVitals'
-import store from './state/store'
+import store from './app/store'
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+const root = ReactDOM.createRoot(document.getElementById('root')!)
 
 root.render(
   <Provider store={store}>
-    <AppWithRedux />
+    <App />
   </Provider>
 )
 
