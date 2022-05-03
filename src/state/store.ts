@@ -1,12 +1,8 @@
 import { tasksReducer } from './tasks-reducer'
 import { todolistsReducer } from './todolists-reducer'
-import { combineReducers, createStore } from 'redux'
-
-declare global {
-  interface Window {
-    __REDUX_DEVTOOLS_EXTENSION__: any
-  }
-}
+import { combineReducers, createStore, applyMiddleware } from 'redux'
+import { composeWithDevTools } from '@redux-devtools/extension'
+import thunk, { ThunkDispatch } from 'redux-thunk'
 
 const rootReducer = combineReducers({
   tasks: tasksReducer,
@@ -15,8 +11,13 @@ const rootReducer = combineReducers({
 
 const store = createStore(
   rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  composeWithDevTools(applyMiddleware(thunk))
 )
+
 export type AppRootStateType = ReturnType<typeof rootReducer>
 
 export default store
+
+type AppActionType = ReturnType<typeof store.dispatch>
+
+export type AppDispatch = ThunkDispatch<AppRootStateType, void, AppActionType>
