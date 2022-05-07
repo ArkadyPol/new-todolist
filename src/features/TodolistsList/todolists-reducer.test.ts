@@ -1,5 +1,6 @@
 import {
   addTodolistAC,
+  changeTodolistEntityStatusAC,
   changeTodolistFilterAC,
   changeTodolistTitleAC,
   FilterValuesType,
@@ -8,16 +9,16 @@ import {
   TodolistDomainType,
   todolistsReducer,
 } from './todolists-reducer'
-import { v1 } from 'uuid'
 import { TodolistType } from '../../api/todolist-api'
+import { RequestStatusType } from '../../app/app-reducer'
 
 let todolistId1: string
 let todolistId2: string
 let startState: TodolistDomainType[] = []
 
 beforeEach(() => {
-  todolistId1 = v1()
-  todolistId2 = v1()
+  todolistId1 = '1'
+  todolistId2 = '2'
   startState = [
     {
       id: todolistId1,
@@ -25,6 +26,7 @@ beforeEach(() => {
       filter: 'all',
       addedDate: '',
       order: 0,
+      entityStatus: 'idle',
     },
     {
       id: todolistId2,
@@ -32,6 +34,7 @@ beforeEach(() => {
       filter: 'all',
       addedDate: '',
       order: 0,
+      entityStatus: 'idle',
     },
   ]
 })
@@ -56,6 +59,7 @@ test('correct todolist should be added', () => {
   expect(endState.length).toBe(3)
   expect(endState[0].title).toBe(newTodolist.title)
   expect(endState[0].filter).toBe('all')
+  expect(endState[0].entityStatus).toBe('idle')
 })
 
 test('correct todolist should change its name', () => {
@@ -75,7 +79,7 @@ test('correct filter of todolist should be changed', () => {
 
   const endState = todolistsReducer(
     startState,
-    changeTodolistFilterAC(newFilter, todolistId2)
+    changeTodolistFilterAC(todolistId2, newFilter)
   )
 
   expect(endState[0].filter).toBe('all')
@@ -102,4 +106,17 @@ test('todolists should be set to the state', () => {
 
   expect(endState.length).toBe(2)
   expect(endState[0].filter).toBe('all')
+  expect(endState[0].entityStatus).toBe('idle')
+})
+
+test('correct entity status of todolist should be changed', () => {
+  let newStatus: RequestStatusType = 'loading'
+
+  const endState = todolistsReducer(
+    startState,
+    changeTodolistEntityStatusAC(todolistId2, newStatus)
+  )
+
+  expect(endState[0].entityStatus).toBe('idle')
+  expect(endState[1].entityStatus).toBe(newStatus)
 })

@@ -1,6 +1,6 @@
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import Delete from '@material-ui/icons/Delete'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import Delete from '@mui/icons-material/Delete'
 import { memo, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import AddItemForm from '../../../components/AddItemForm/AddItemForm'
@@ -8,13 +8,11 @@ import { TaskStatuses, TaskType } from '../../../api/todolist-api'
 import EditableSpan from '../../../components/EditableSpan/EditableSpan'
 import { AppDispatch } from '../../../app/store'
 import { fetchTasksTC } from '../tasks-reducer'
-import { FilterValuesType } from '../todolists-reducer'
+import { FilterValuesType, TodolistDomainType } from '../todolists-reducer'
 import Task from './Task/Task'
 
 type PropsType = {
-  id: string
-  title: string
-  filter: FilterValuesType
+  todolist: TodolistDomainType
   tasks: TaskType[]
   addTask: (task: string, todolistId: string) => void
   changeTaskStatus: (
@@ -29,9 +27,18 @@ type PropsType = {
   removeTodolist: (todolistId: string) => void
 }
 
-const Todolist = memo((props: PropsType) => {
-  const { id, addTask, changeFilter, changeTodolistTitle } = props
-  console.log('Todolist called')
+const Todolist = memo<PropsType>(props => {
+  const {
+    addTask,
+    changeFilter,
+    changeTodolistTitle,
+    changeTaskStatus,
+    changeTaskTitle,
+    removeTask,
+    removeTodolist,
+    tasks,
+  } = props
+  const { id, entityStatus, filter, title } = props.todolist
 
   const dispacth = useDispatch<AppDispatch>()
 
@@ -39,30 +46,15 @@ const Todolist = memo((props: PropsType) => {
     dispacth(fetchTasksTC(id))
   }, [dispacth, id])
 
-  let tasksForTodolist = props.tasks
+  let tasksForTodolist = tasks
 
-  if (props.filter === 'active') {
-    tasksForTodolist = props.tasks.filter(t => t.status === TaskStatuses.New)
+  if (filter === 'active') {
+    tasksForTodolist = tasks.filter(t => t.status === TaskStatuses.New)
   }
 
-  if (props.filter === 'completed') {
-    tasksForTodolist = props.tasks.filter(
-      t => t.status === TaskStatuses.Completed
-    )
+  if (filter === 'completed') {
+    tasksForTodolist = tasks.filter(t => t.status === TaskStatuses.Completed)
   }
-
-  const tasks = tasksForTodolist.map(t => (
-    <Task
-      key={t.id}
-      status={t.status}
-      title={t.title}
-      taskId={t.id}
-      todolistId={id}
-      removeTask={props.removeTask}
-      changeTaskStatus={props.changeTaskStatus}
-      changeTaskTitle={props.changeTaskTitle}
-    />
-  ))
 
   const onAllClickHandler = useCallback(
     () => changeFilter('all', id),
@@ -76,10 +68,6 @@ const Todolist = memo((props: PropsType) => {
     () => changeFilter('completed', id),
     [changeFilter, id]
   )
-
-  const removeTodolist = () => {
-    props.removeTodolist(id)
-  }
 
   const addItem = useCallback(
     (title: string) => {
@@ -98,30 +86,49 @@ const Todolist = memo((props: PropsType) => {
   return (
     <div>
       <h3>
-        <EditableSpan value={props.title} onChange={onChangeHandler} />{' '}
-        <IconButton onClick={removeTodolist}>
+        <EditableSpan
+          value={title}
+          onChange={onChangeHandler}
+          disabled={entityStatus === 'loading'}
+        />{' '}
+        <IconButton
+          onClick={() => removeTodolist(id)}
+          disabled={entityStatus === 'loading'}
+        >
           <Delete />
         </IconButton>
       </h3>
 
-      <AddItemForm addItem={addItem} />
-      <div>{tasks}</div>
+      <AddItemForm addItem={addItem} disabled={entityStatus === 'loading'} />
+      <div>
+        {tasksForTodolist.map(t => (
+          <Task
+            key={t.id}
+            task={t}
+            todolistId={id}
+            removeTask={removeTask}
+            changeTaskStatus={changeTaskStatus}
+            changeTaskTitle={changeTaskTitle}
+          />
+        ))}
+      </div>
       <div>
         <Button
-          variant={props.filter === 'all' ? 'outlined' : 'text'}
+          variant={filter === 'all' ? 'outlined' : 'text'}
           onClick={onAllClickHandler}
+          color="inherit"
         >
           All
         </Button>
         <Button
-          variant={props.filter === 'active' ? 'outlined' : 'text'}
+          variant={filter === 'active' ? 'outlined' : 'text'}
           onClick={onActiveClickHandler}
           color="primary"
         >
           Active
         </Button>
         <Button
-          variant={props.filter === 'completed' ? 'outlined' : 'text'}
+          variant={filter === 'completed' ? 'outlined' : 'text'}
           onClick={onCompletedClickHandler}
           color="secondary"
         >

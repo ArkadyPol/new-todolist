@@ -1,7 +1,7 @@
 import AddItemForm from '../../components/AddItemForm/AddItemForm'
 import Todolist from './Todolist/Todolist'
-import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
+import Grid from '@mui/material/Grid'
+import Paper from '@mui/material/Paper'
 import {
   changeTodolistFilterAC,
   FilterValuesType,
@@ -73,7 +73,7 @@ export function TodolistsList() {
 
   const changeFilter = useCallback(
     (value: FilterValuesType, todolistId: string) => {
-      dispatch(changeTodolistFilterAC(value, todolistId))
+      dispatch(changeTodolistFilterAC(todolistId, value))
     },
     [dispatch]
   )
@@ -103,9 +103,7 @@ export function TodolistsList() {
             <Grid item key={tl.id}>
               <Paper style={{ padding: '10px' }}>
                 <Todolist
-                  id={tl.id}
-                  title={tl.title}
-                  filter={tl.filter}
+                  todolist={tl}
                   tasks={tasks[tl.id]}
                   addTask={addTask}
                   changeTaskStatus={changeTaskStatus}
