@@ -2,6 +2,9 @@ import AddItemForm from '../../components/AddItemForm/AddItemForm'
 import Todolist from './Todolist/Todolist'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
+import { useDispatch, useSelector } from 'react-redux'
+import { useCallback, useEffect } from 'react'
+import { Navigate } from 'react-router-dom'
 import {
   changeTodolistFilterAC,
   FilterValuesType,
@@ -18,8 +21,6 @@ import {
   updateTaskTC,
 } from './tasks-reducer'
 import { AppDispatch, AppRootStateType } from '../../app/store'
-import { useDispatch, useSelector } from 'react-redux'
-import { useCallback, useEffect } from 'react'
 import { TaskStatuses } from '../../api/todolist-api'
 
 export function TodolistsList() {
@@ -29,12 +30,16 @@ export function TodolistsList() {
   const tasks = useSelector<AppRootStateType, TasksStateType>(
     state => state.tasks
   )
+  const isLoggedIn = useSelector<AppRootStateType, boolean>(
+    state => state.auth.isLoggedIn
+  )
 
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
+    if (!isLoggedIn) return
     dispatch(fetchTodolistsTC())
-  }, [dispatch])
+  }, [dispatch, isLoggedIn])
 
   const addTask = useCallback(
     (title: string, todolistId: string) => {
@@ -91,6 +96,10 @@ export function TodolistsList() {
     },
     [dispatch]
   )
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />
+  }
 
   return (
     <>
