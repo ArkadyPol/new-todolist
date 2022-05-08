@@ -6,12 +6,12 @@ import Menu from '@mui/icons-material/Menu'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import LinearProgress from '@mui/material/LinearProgress'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useCallback, useEffect } from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import { TodolistsList } from '../features/TodolistsList/TodolistsList'
-import { AppDispatch, AppRootStateType } from './store'
+import { useAppDispatch, AppRootStateType } from './store'
 import { initializeAppTC, RequestStatusType } from './app-reducer'
 import ErrorSnackbar from '../components/ErrorSnackbar/ErrorSnackbar'
 import { Login } from '../features/Login/Login'
@@ -27,7 +27,7 @@ function App() {
   const isLoggedIn = useSelector<AppRootStateType, boolean>(
     state => state.auth.isLoggedIn
   )
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(initializeAppTC())

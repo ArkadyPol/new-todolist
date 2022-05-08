@@ -2,11 +2,10 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import Delete from '@mui/icons-material/Delete'
 import { memo, useCallback, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import AddItemForm from '../../../components/AddItemForm/AddItemForm'
 import { TaskStatuses, TaskType } from '../../../api/todolist-api'
 import EditableSpan from '../../../components/EditableSpan/EditableSpan'
-import { AppDispatch } from '../../../app/store'
+import { useAppDispatch } from '../../../app/store'
 import { fetchTasksTC } from '../tasks-reducer'
 import { FilterValuesType, TodolistDomainType } from '../todolists-reducer'
 import Task from './Task/Task'
@@ -40,7 +39,7 @@ const Todolist = memo<PropsType>(props => {
   } = props
   const { id, entityStatus, filter, title } = props.todolist
 
-  const dispacth = useDispatch<AppDispatch>()
+  const dispacth = useAppDispatch()
 
   useEffect(() => {
     dispacth(fetchTasksTC(id))
