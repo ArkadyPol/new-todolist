@@ -3,7 +3,7 @@ import {
   setAppError,
   setAppStatus,
   InitialStateType,
-  setIsInitialized,
+  initializeApp,
 } from './app-reducer'
 
 let startState: InitialStateType
@@ -29,7 +29,9 @@ test('correct status should be set', () => {
 })
 
 test('app should be initialized', () => {
-  const endState = appReducer(startState, setIsInitialized(true))
+  const action = initializeApp.fulfilled(undefined, 'requestId', undefined)
+
+  const endState = appReducer(startState, action)
 
   expect(endState.isInitialized).toBeTruthy()
 })

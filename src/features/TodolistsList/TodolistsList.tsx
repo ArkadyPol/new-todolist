@@ -9,16 +9,16 @@ import {
   changeTodolistFilter,
   FilterValuesType,
   TodolistDomainType,
-  fetchTodolistsTC,
-  removeTodolistTC,
-  addTodolistTC,
-  changeTodolistTitleTC,
+  fetchTodolists,
+  removeTodolist,
+  changeTodolistTitle,
+  addTodolist,
 } from './todolists-reducer'
 import {
-  addTaskTC,
-  removeTaskTC,
+  addTask,
+  removeTask,
   TasksStateType,
-  updateTaskTC,
+  updateTask,
 } from './tasks-reducer'
 import { AppRootStateType, useAppDispatch } from '../../app/store'
 import { TaskStatuses } from '../../api/todolist-api'
@@ -38,40 +38,40 @@ export function TodolistsList() {
 
   useEffect(() => {
     if (!isLoggedIn) return
-    dispatch(fetchTodolistsTC())
+    dispatch(fetchTodolists())
   }, [dispatch, isLoggedIn])
 
-  const addTask = useCallback(
+  const addTaskHandler = useCallback(
     (title: string, todolistId: string) => {
-      dispatch(addTaskTC(title, todolistId))
+      dispatch(addTask({ title, todolistId }))
     },
     [dispatch]
   )
 
   const changeTaskStatus = useCallback(
     (taskId: string, status: TaskStatuses, todolistId: string) => {
-      dispatch(updateTaskTC(taskId, todolistId, { status }))
+      dispatch(updateTask({ taskId, todolistId, model: { status } }))
     },
     [dispatch]
   )
 
   const changeTaskTitle = useCallback(
     (taskId: string, title: string, todolistId: string) => {
-      dispatch(updateTaskTC(taskId, todolistId, { title }))
+      dispatch(updateTask({ taskId, todolistId, model: { title } }))
     },
     [dispatch]
   )
 
-  const removeTask = useCallback(
+  const removeTaskHandler = useCallback(
     (taskId: string, todolistId: string) => {
-      dispatch(removeTaskTC(taskId, todolistId))
+      dispatch(removeTask({ taskId, todolistId }))
     },
     [dispatch]
   )
 
-  const addTodolist = useCallback(
+  const addTodolistHandler = useCallback(
     (title: string) => {
-      dispatch(addTodolistTC(title))
+      dispatch(addTodolist(title))
     },
     [dispatch]
   )
@@ -83,16 +83,16 @@ export function TodolistsList() {
     [dispatch]
   )
 
-  const changeTodolistTitle = useCallback(
-    (title: string, todolistId: string) => {
-      dispatch(changeTodolistTitleTC(todolistId, title))
+  const changeTodolistTitleHandler = useCallback(
+    (title: string, id: string) => {
+      dispatch(changeTodolistTitle({ id, title }))
     },
     [dispatch]
   )
 
-  const removeTodolist = useCallback(
+  const removeTodolistHandler = useCallback(
     (todolistId: string) => {
-      dispatch(removeTodolistTC(todolistId))
+      dispatch(removeTodolist(todolistId))
     },
     [dispatch]
   )
@@ -104,7 +104,7 @@ export function TodolistsList() {
   return (
     <>
       <Grid container style={{ padding: '20px' }}>
-        <AddItemForm addItem={addTodolist} />
+        <AddItemForm addItem={addTodolistHandler} />
       </Grid>
       <Grid container spacing={3}>
         {todolists.map(tl => {
@@ -114,13 +114,13 @@ export function TodolistsList() {
                 <Todolist
                   todolist={tl}
                   tasks={tasks[tl.id]}
-                  addTask={addTask}
+                  addTask={addTaskHandler}
                   changeTaskStatus={changeTaskStatus}
                   changeTaskTitle={changeTaskTitle}
-                  removeTask={removeTask}
+                  removeTask={removeTaskHandler}
                   changeFilter={changeFilter}
-                  changeTodolistTitle={changeTodolistTitle}
-                  removeTodolist={removeTodolist}
+                  changeTodolistTitle={changeTodolistTitleHandler}
+                  removeTodolist={removeTodolistHandler}
                 />
               </Paper>
             </Grid>

@@ -66,15 +66,19 @@ type UserType = {
   email: string
   login: string
 }
-type GetTasksResponse = {
+export type GetTasksResponse = {
   items: TaskType[]
   totalCount: number
   error: string | null
 }
+export type FieldErrorType = {
+  field: string
+  error: string
+}
 export type ResponseType<D = {}> = {
   resultCode: number
   messages: Array<string>
-  fieldsErrors: Array<string>
+  fieldsErrors: Array<FieldErrorType>
   data: D
 }
 export type TodolistType = {

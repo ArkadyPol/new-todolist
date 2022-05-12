@@ -6,7 +6,7 @@ import AddItemForm from '../../../components/AddItemForm/AddItemForm'
 import { TaskStatuses, TaskType } from '../../../api/todolist-api'
 import EditableSpan from '../../../components/EditableSpan/EditableSpan'
 import { useAppDispatch } from '../../../app/store'
-import { fetchTasksTC } from '../tasks-reducer'
+import { fetchTasks } from '../tasks-reducer'
 import { FilterValuesType, TodolistDomainType } from '../todolists-reducer'
 import Task from './Task/Task'
 
@@ -42,7 +42,7 @@ const Todolist = memo<PropsType>(props => {
   const dispacth = useAppDispatch()
 
   useEffect(() => {
-    dispacth(fetchTasksTC(id))
+    dispacth(fetchTasks(id))
   }, [dispacth, id])
 
   let tasksForTodolist = tasks

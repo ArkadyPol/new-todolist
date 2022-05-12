@@ -8,8 +8,8 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useFormik } from 'formik'
 import { Navigate } from 'react-router-dom'
-import {  useSelector } from 'react-redux'
-import { loginTC } from './auth-reducer'
+import { useSelector } from 'react-redux'
+import { login } from './auth-reducer'
 import { AppRootStateType, useAppDispatch } from '../../app/store'
 
 type FormikErrorType = {
@@ -45,9 +45,17 @@ export const Login = () => {
       password: '',
       rememberMe: false,
     },
-    onSubmit: values => {
-      dispatch(loginTC(values))
-      formik.resetForm()
+    onSubmit: async (values, formikHelpers) => {
+      const action = await dispatch(login(values))
+      if (login.rejected.match(action)) {
+        if (action.payload?.fieldsErrors?.length) {
+          action.payload.fieldsErrors.forEach(err => {
+            formikHelpers.setFieldError(err.field, err.error)
+          })
+        }
+      } else {
+        formik.resetForm()
+      }
     },
   })
 

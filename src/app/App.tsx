@@ -12,10 +12,10 @@ import { useCallback, useEffect } from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import { TodolistsList } from '../features/TodolistsList/TodolistsList'
 import { useAppDispatch, AppRootStateType } from './store'
-import { initializeAppTC, RequestStatusType } from './app-reducer'
+import { initializeApp, RequestStatusType } from './app-reducer'
 import ErrorSnackbar from '../components/ErrorSnackbar/ErrorSnackbar'
 import { Login } from '../features/Login/Login'
-import { logoutTC } from '../features/Login/auth-reducer'
+import { logout } from '../features/Login/auth-reducer'
 
 function App() {
   const status = useSelector<AppRootStateType, RequestStatusType>(
@@ -30,11 +30,11 @@ function App() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(initializeAppTC())
+    dispatch(initializeApp())
   }, [dispatch])
 
   const logoutHandler = useCallback(() => {
-    dispatch(logoutTC())
+    dispatch(logout())
   }, [dispatch])
 
   if (!isInitialized) {

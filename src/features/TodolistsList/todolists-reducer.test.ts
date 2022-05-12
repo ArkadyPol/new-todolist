@@ -5,7 +5,7 @@ import {
   changeTodolistTitle,
   FilterValuesType,
   removeTodolist,
-  setTodolists,
+  fetchTodolists,
   TodolistDomainType,
   todolistsReducer,
 } from './todolists-reducer'
@@ -40,21 +40,29 @@ beforeEach(() => {
 })
 
 test('correct todolist should be removed', () => {
-  const endState = todolistsReducer(startState, removeTodolist(todolistId1))
+  const action = removeTodolist.fulfilled(todolistId1, 'requestId', todolistId1)
+
+  const endState = todolistsReducer(startState, action)
 
   expect(endState.length).toBe(1)
   expect(endState[0].id).toBe(todolistId2)
 })
 
 test('correct todolist should be added', () => {
-  let newTodolist: TodolistType = {
+  const newTodolist: TodolistType = {
     id: todolistId1,
     title: 'New Todolist',
     addedDate: '',
     order: 0,
   }
 
-  const endState = todolistsReducer(startState, addTodolist(newTodolist))
+  const action = addTodolist.fulfilled(
+    newTodolist,
+    'requestId',
+    newTodolist.title
+  )
+
+  const endState = todolistsReducer(startState, action)
 
   expect(endState.length).toBe(3)
   expect(endState[0].title).toBe(newTodolist.title)
@@ -63,12 +71,12 @@ test('correct todolist should be added', () => {
 })
 
 test('correct todolist should change its name', () => {
-  let newTodolistTitle = 'New Todolist'
+  const newTodolistTitle = 'New Todolist'
+  const param = { id: todolistId2, title: newTodolistTitle }
 
-  const endState = todolistsReducer(
-    startState,
-    changeTodolistTitle({ id: todolistId2, title: newTodolistTitle })
-  )
+  const action = changeTodolistTitle.fulfilled(param, 'requestId', param)
+
+  const endState = todolistsReducer(startState, action)
 
   expect(endState[0].title).toBe('What to learn')
   expect(endState[1].title).toBe(newTodolistTitle)
@@ -102,7 +110,9 @@ test('todolists should be set to the state', () => {
     },
   ]
 
-  const endState = todolistsReducer([], setTodolists(startState))
+  const action = fetchTodolists.fulfilled(startState, 'requestId')
+
+  const endState = todolistsReducer([], action)
 
   expect(endState.length).toBe(2)
   expect(endState[0].filter).toBe('all')
