@@ -10,6 +10,7 @@ import {
   handleServerAppError,
   handleServerNetworkError,
 } from '../../utils/error-utils'
+import { fetchTodolists } from '../TodolistsList/todolists-reducer'
 
 export const login = createAsyncThunk<
   undefined,
@@ -26,6 +27,7 @@ export const login = createAsyncThunk<
     const { data } = await authAPI.login(param)
     if (data.resultCode === 0) {
       dispatch(setAppStatus('succeeded'))
+      dispatch(fetchTodolists())
     } else {
       handleServerAppError(data, dispatch)
       return rejectWithValue({

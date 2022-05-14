@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, memo, useState } from 'react'
+import { KeyboardEvent, memo, useState } from 'react'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import AddBox from '@mui/icons-material/AddBox'
@@ -21,10 +21,6 @@ const AddItemForm = memo<PropsType>(({ addItem, disabled = false }) => {
     }
   }
 
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.currentTarget.value)
-  }
-
   const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (error !== null) {
       setError(null)
@@ -39,7 +35,7 @@ const AddItemForm = memo<PropsType>(({ addItem, disabled = false }) => {
         variant="outlined"
         error={!!error}
         value={title}
-        onChange={onChangeHandler}
+        onChange={e => setTitle(e.currentTarget.value)}
         onKeyDown={onKeyDownHandler}
         label="Title"
         helperText={error}

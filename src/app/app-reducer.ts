@@ -6,6 +6,7 @@ import {
   handleServerNetworkError,
 } from '../utils/error-utils'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { fetchTodolists } from '../features/TodolistsList/todolists-reducer'
 
 export const initializeApp = createAsyncThunk(
   'app/initializeApp',
@@ -16,6 +17,7 @@ export const initializeApp = createAsyncThunk(
       if (data.resultCode === 0) {
         dispatch(setIsLoggedIn(true))
         dispatch(setAppStatus('succeeded'))
+        dispatch(fetchTodolists())
       } else {
         handleServerAppError(data, dispatch)
       }

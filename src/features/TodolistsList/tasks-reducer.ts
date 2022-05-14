@@ -10,6 +10,7 @@ import {
   handleServerAppError,
   handleServerNetworkError,
 } from '../../utils/error-utils'
+import { logout } from '../Login/auth-reducer'
 import {
   addTodolist,
   removeTodolist,
@@ -169,6 +170,9 @@ const takskSlice = createSlice({
         if (task) {
           Object.assign(task, model)
         }
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        return {}
       })
   },
 })

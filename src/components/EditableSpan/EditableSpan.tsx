@@ -1,4 +1,4 @@
-import { ChangeEvent, memo, useState } from 'react'
+import { memo, useState } from 'react'
 import TextField from '@mui/material/TextField'
 
 type PropsType = {
@@ -24,17 +24,13 @@ const EditableSpan = memo<PropsType>(
       onChange(title)
     }
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-      setTitle(e.currentTarget.value)
-    }
-
     return editMode ? (
       <TextField
         variant="outlined"
         value={title}
         autoFocus
         onBlur={activateViewMode}
-        onChange={onChangeHandler}
+        onChange={e => setTitle(e.currentTarget.value)}
       />
     ) : (
       <span onDoubleClick={activateEditMode}>{value}</span>

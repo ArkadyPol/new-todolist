@@ -8,7 +8,7 @@ import Container from '@mui/material/Container'
 import LinearProgress from '@mui/material/LinearProgress'
 import { useSelector } from 'react-redux'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import { TodolistsList } from '../features/TodolistsList/TodolistsList'
 import { useAppDispatch, AppRootStateType } from './store'
@@ -31,10 +31,6 @@ function App() {
 
   useEffect(() => {
     dispatch(initializeApp())
-  }, [dispatch])
-
-  const logoutHandler = useCallback(() => {
-    dispatch(logout())
   }, [dispatch])
 
   if (!isInitialized) {
@@ -62,7 +58,7 @@ function App() {
           </IconButton>
           <Typography variant="h6">News</Typography>
           {isLoggedIn && (
-            <Button color="inherit" onClick={logoutHandler}>
+            <Button color="inherit" onClick={() => dispatch(logout())}>
               Log out
             </Button>
           )}

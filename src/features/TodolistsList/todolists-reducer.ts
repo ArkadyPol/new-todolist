@@ -6,6 +6,8 @@ import {
 } from '../../utils/error-utils'
 import { AxiosError } from 'axios'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { fetchTasks } from './tasks-reducer'
+import { logout } from '../Login/auth-reducer'
 
 export const fetchTodolists = createAsyncThunk(
   'todolists/fetchTodolists',
@@ -14,6 +16,7 @@ export const fetchTodolists = createAsyncThunk(
     try {
       const { data } = await todolistAPI.getTodolists()
       dispatch(setAppStatus('succeeded'))
+      data.forEach(tl => dispatch(fetchTasks(tl.id)))
       return data
     } catch (err) {
       const error = err as AxiosError
@@ -137,6 +140,9 @@ const todolistsSlice = createSlice({
         if (todolist) {
           todolist.title = title
         }
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        return []
       })
   },
 })

@@ -88,20 +88,18 @@ export const Login = () => {
               <TextField
                 label="Email"
                 margin="normal"
+                error={formik.touched.email && !!formik.errors.email}
+                helperText={formik.touched.email && formik.errors.email}
                 {...formik.getFieldProps('email')}
               />
-              {formik.touched.email && formik.errors.email && (
-                <div style={{ color: 'red' }}>{formik.errors.email}</div>
-              )}
               <TextField
                 type="password"
                 label="Password"
                 margin="normal"
+                error={formik.touched.password && !!formik.errors.password}
+                helperText={formik.touched.password && formik.errors.password}
                 {...formik.getFieldProps('password')}
               />
-              {formik.touched.password && formik.errors.password && (
-                <div style={{ color: 'red' }}>{formik.errors.password}</div>
-              )}
               <FormControlLabel
                 label={'Remember me'}
                 control={
