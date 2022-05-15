@@ -8,9 +8,8 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useFormik } from 'formik'
 import { Navigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import { login } from './auth-reducer'
-import { AppRootStateType, useAppDispatch } from '../../app/store'
+import { useAppDispatch, useAppSelector } from '../../app/store'
 
 type FormikErrorType = {
   email?: string
@@ -19,9 +18,7 @@ type FormikErrorType = {
 }
 
 export const Login = () => {
-  const isLoggedIn = useSelector<AppRootStateType, boolean>(
-    state => state.auth.isLoggedIn
-  )
+  const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
   const dispatch = useAppDispatch()
   const formik = useFormik({
     validate: values => {

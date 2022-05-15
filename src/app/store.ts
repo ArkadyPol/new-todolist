@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux'
 import { tasksReducer } from '../features/TodolistsList/tasks-reducer'
 import { todolistsReducer } from '../features/TodolistsList/todolists-reducer'
 import { appReducer } from './app-reducer'
@@ -19,5 +19,7 @@ const store = configureStore({
 type AppDispatch = typeof store.dispatch
 export type AppRootStateType = ReturnType<typeof rootReducer>
 export const useAppDispatch = () => useDispatch<AppDispatch>()
+export const useAppSelector: TypedUseSelectorHook<AppRootStateType> =
+  useSelector
 
 export default store

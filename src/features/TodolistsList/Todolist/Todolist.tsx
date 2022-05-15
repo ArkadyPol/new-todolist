@@ -12,9 +12,8 @@ import {
   TodolistDomainType,
 } from '../todolists-reducer'
 import Task from './Task/Task'
-import { useSelector } from 'react-redux'
-import { AppRootStateType, useAppDispatch } from '../../../app/store'
-import { addTask, TasksStateType } from '../tasks-reducer'
+import { useAppDispatch, useAppSelector } from '../../../app/store'
+import { addTask } from '../tasks-reducer'
 
 type PropsType = {
   todolist: TodolistDomainType
@@ -22,9 +21,7 @@ type PropsType = {
 
 const Todolist = memo<PropsType>(props => {
   const { id, entityStatus, filter, title } = props.todolist
-  const tasks = useSelector<AppRootStateType, TasksStateType>(
-    state => state.tasks
-  )[id]
+  const tasks = useAppSelector(state => state.tasks)[id]
 
   const dispatch = useAppDispatch()
 
